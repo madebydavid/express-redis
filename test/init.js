@@ -16,7 +16,7 @@ module.exports = {
 
     var req = {};
     mWare(req, {}, function () {
-      test.notEqual(typeof req.db, 'undefined', 'Redis not added to request.');
+      test.notEqual(typeof req.redis, 'undefined', 'Redis not added to request.');
       test.done();
     });
   },
@@ -31,44 +31,33 @@ module.exports = {
 
     var req = {};
     mWare(req, {}, function () {
-      test.notEqual(typeof req.db, 'undefined', 'Redis not added to request.');
+      test.notEqual(typeof req.redis, 'undefined', 'Redis not added to request.');
       test.done();
     });
 
     conn.emit('ready');
   },
-  customPort: function (test) {
+  customUrl: function (test) {
     test.expect(1);
-    var testPort = 123;
+    var testUrl = 'redis://example.com:1/';
 
-    this.stub = sinon.stub(redis, 'createClient', function (port) {
-      test.equal(port, testPort, 'Custom port not used.');
+    this.stub = sinon.stub(redis, 'createClient', function (url) {
+      test.equal(url, testUrl, 'Custom url not used.');
       test.done();
     });
 
-    expressRedis(testPort);
-  },
-  customHost: function (test) {
-    test.expect(1);
-    var testHost = 'example.com';
-
-    this.stub = sinon.stub(redis, 'createClient', function (port, host) {
-      test.equal(host, testHost, 'Custom host not used.');
-      test.done();
-    });
-
-    expressRedis(undefined, testHost);
+    expressRedis(testUrl);
   },
   customOptions: function (test) {
     test.expect(1);
     var testOpts = {test:1};
 
-    this.stub = sinon.stub(redis, 'createClient', function (port, host, options) {
+    this.stub = sinon.stub(redis, 'createClient', function (url, options) {
       test.equal(options.test, testOpts.test, 'Custom options not used.');
       test.done();
     });
 
-    expressRedis(undefined, undefined, testOpts);
+    expressRedis(undefined, testOpts);
   },
   customName: function (test) {
     test.expect(1);
@@ -76,11 +65,11 @@ module.exports = {
       return {connected: true};
     });
 
-    var mWare = expressRedis(undefined, undefined, undefined, 'redis');
+    var mWare = expressRedis(undefined, undefined, 'db');
     var req = {};
     mWare(req, {}, function () {
       test.notEqual(
-        typeof req.redis,
+        typeof req.db,
         'undefined',
         'Custom redis name not added to request.'
       );

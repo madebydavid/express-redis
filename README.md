@@ -4,7 +4,7 @@
 [![Coverage Status](https://coveralls.io/repos/elliotttf/express-redis/badge.svg?branch=master&service=github)](https://coveralls.io/github/elliotttf/express-redis?branch=master)
 
 This is a simple express middleware for [redis](https://www.npmjs.org/package/redis)
-and provides a shared redis `db` object across all requests.
+and provides a shared redis `redis` object across all requests.
 
 ## Basic Usage
 
@@ -12,7 +12,7 @@ and provides a shared redis `db` object across all requests.
 app.use(require('express-redis'));
 
 app.get('/', function (req, res, next) {
-  req.db.get('some_key', function (err, reply) {
+  req.redis.get('some_key', function (err, reply) {
     if (err) {
       return res.status(500).end();
     }
@@ -32,7 +32,7 @@ var options = {
   return_buffers: true,
   auth_pass: 'superSecretPassword'
 };
-app.use(require('express-redis')(6379, '127.0.0.1', options, 'name'));
+app.use(require('express-redis')('redis://localhost:6379/', options, 'name'));
 ```
 
 The name string allows you to specify a custom varaible name to provide the middleware on
