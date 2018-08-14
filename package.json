@@ -13,7 +13,6 @@
   },
   "license": "MIT",
   "dependencies": {
-    "redis": "2.4.0",
     "debug": "2.2.0"
   },
   "devDependencies": {
@@ -24,6 +23,9 @@
     "gulp-istanbul": "0.8.1",
     "gulp-nodeunit": "0.0.5",
     "sinon": "1.17.1"
+  },
+  "peerDependencies": {
+    "redis": "^2.8.0"
   },
   "config": {
     "ghooks": {
